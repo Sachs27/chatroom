@@ -4,12 +4,12 @@ CC = gcc
 SRCS = main.c view.c server.c client.c
 LIBS = -liup -lpthread
 CFLAGS +=
-EXE =
 
 SRC_DIR = ./src
 BIN_DIR = ./bin
 
 ifeq ($(findstring Linux,$(PLATFORM)),Linux)
+	EXE = .out
 	SRCS += socket_linux.c string_value_utf8.c
 else
 	EXE = .exe
@@ -19,7 +19,7 @@ else
 endif
 
 OBJS = $(SRCS:%.c=%.o)
-BIN = chartoom$(EXE)
+BIN = chatroom$(EXE)
 
 all: bin
 
