@@ -191,6 +191,16 @@ static void timer_online_cb(void)
     return;
 }
 
+static void timer_btn_cb(Ihandle *timer)
+{
+    Ihandle *btn = IupGetHandle("btn_send");
+
+    IupSetAttribute(btn, "ACTIVE", "YES");
+    IupSetAttribute(timer, "RUN", "NO");
+
+    return;
+}
+
 int main(int argc, char *argv[])
 {
     init_client_server();
@@ -201,11 +211,16 @@ int main(int argc, char *argv[])
 
     Ihandle *timer_msg = IupTimer();
     IupSetAttributes(timer_msg, "TIME = 1, RUN = YES");
-    IupSetCallback(timer_msg, "ACTION_CB", (Icallback)timer_msg_cb);
+    IupSetCallback(timer_msg, "ACTION_CB", (Icallback) timer_msg_cb);
 
     Ihandle *timer_online = IupTimer();
     IupSetAttributes(timer_online, "TIME = 1000, RUN = YES");
-    IupSetCallback(timer_online, "ACTION_CB", (Icallback)timer_online_cb);
+    IupSetCallback(timer_online, "ACTION_CB", (Icallback) timer_online_cb);
+
+    Ihandle *timer_btn = IupTimer();
+    IupSetAttributes(timer_btn, "TIME = 500, RUN = NO");
+    IupSetCallback(timer_btn, "ACTION_CB", (Icallback) timer_btn_cb);
+    IupSetHandle("timer_btn", timer_btn);
 
     IupMainLoop();
 
@@ -213,6 +228,7 @@ int main(int argc, char *argv[])
     IupDestroy(IupGetHandle("dlg"));
     IupDestroy(timer_msg);
     IupDestroy(timer_online);
+    IupDestroy(timer_btn);
 
     IupClose();
 

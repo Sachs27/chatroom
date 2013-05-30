@@ -8,22 +8,27 @@
 #include "server.h"
 
 
-static void btn_send_action()
+static void btn_send_action(Ihandle *btn)
 {
     Ihandle *ml = IupGetHandle("ml_input");
     char *msg = IupGetAttribute(ml, "VALUE");
-    if (msg && *msg) {
+    if (msg && *msg && IupGetInt(btn, "ACTIVE")) {
         pthread_mutex_lock(&client_done);
         client_send_msg(msg);
         IupSetAttribute(ml, "VALUE", "");
         pthread_mutex_unlock(&client_request);
+
+        IupSetAttribute(btn, "ACTIVE", "NO");
+        IupSetAttribute(IupGetHandle("timer_btn"), "RUN", "YES");
     }
+
+    return;
 }
 
 static int ml_input_action(Ihandle *self, int c, char *after)
 {
     if (c == '\n') {
-        btn_send_action();
+        btn_send_action(IupGetHandle("btn_send"));
         return IUP_IGNORE;
     } else {
         return c;
@@ -67,7 +72,8 @@ void setup_view(void)
     btn_send = IupButton(btn_send_title, NULL);
     IupSetAttribute(btn_send, "EXPAND", "NO");
     IupSetAttribute(btn_send, "SIZE", "40x40");
-    IupSetCallback(btn_send, "ACTION", (Icallback)btn_send_action);
+    IupSetCallback(btn_send, "ACTION", (Icallback) btn_send_action);
+    IupSetHandle("btn_send", btn_send);
 
     frame_input = IupFrame(
         IupHbox(ml_input, btn_send, NULL)
