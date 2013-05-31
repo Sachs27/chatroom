@@ -12,6 +12,8 @@ static void btn_send_action(Ihandle *btn)
 {
     Ihandle *ml = IupGetHandle("ml_input");
     char *msg = IupGetAttribute(ml, "VALUE");
+    char *p;
+    msg = msg + strspn(msg, " ");   /* trim the begining spaces */
     if (msg && *msg && IupGetInt(btn, "ACTIVE")) {
         pthread_mutex_lock(&client_done);
         client_send_msg(msg);

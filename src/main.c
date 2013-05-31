@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
     IupSetCallback(timer_online, "ACTION_CB", (Icallback) timer_online_cb);
 
     Ihandle *timer_btn = IupTimer();
-    IupSetAttributes(timer_btn, "TIME = 500, RUN = NO");
+    IupSetAttributes(timer_btn, "TIME = 2000, RUN = NO");
     IupSetCallback(timer_btn, "ACTION_CB", (Icallback) timer_btn_cb);
     IupSetHandle("timer_btn", timer_btn);
 
